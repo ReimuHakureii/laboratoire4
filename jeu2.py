@@ -158,16 +158,20 @@ def aventure():
         print("Le parchemin décrit l'emplacement d'un trésor, mais comporte une énigme à résoudre.")
 
         # Mini-jeu d'énigme avec plusieurs tentatives
-        essais = 0
+        attempts = 0
         solved = False
         # Boucle while pour permettre jusqu'à 3 tentatives
-        while essais < 3 and not solved:
+        while attempts < 3 and not solved:
             reponse = input("Enigme : 'Je suis léger comme une plume, mais même le plus fort des hommes ne peut me tenir plus de 5 minutes. Qui suis-je?' Tapez votre réponse: ").lower().strip()
+            # Si aucune réponse n'est donnée, on recommence l'itération
+            if not reponse:
+                print("Vous n'avez rien saisi. Veuillez entrer une réponse.")
+                continue  # Passe directement à l'itération suivante
             if reponse in ["la respiration", "respiration"]:
                 solved = True
                 break
             else:
-                essais += 1
+                attempts += 1
                 print("Réponse incorrecte. Essayez encore.")
         if solved:
             print("\nBravo ! Vous avez résolu l'énigme. Le parchemin révèle l'emplacement d'un coffre.")
@@ -185,7 +189,7 @@ def aventure():
     print("========================================")
     print("Merci d'avoir joué à cette aventure.")
 
-# Exécution du jeu si ce script est exécuté directement
+# Capacité à rejouer l'aventure
 def main():
     play_again = True
     while play_again:
@@ -194,6 +198,6 @@ def main():
         if rejouer not in ["oui", "o"]:
             play_again = False
             print("Au revoir!")
-
+# Exécution du jeu si ce script est exécuté directement
 if __name__ == "__main__":
     main()
