@@ -186,5 +186,14 @@ def aventure():
     print("Merci d'avoir joué à cette aventure.")
 
 # Exécution du jeu si ce script est exécuté directement
+def main():
+    play_again = True
+    while play_again:
+        aventure()
+        rejouer = input("Voulez-vous rejouer l'aventure ? (oui/non) : ").lower().strip()
+        if rejouer not in ["oui", "o"]:
+            play_again = False
+            print("Au revoir!")
+
 if __name__ == "__main__":
-    aventure()
+    main()
