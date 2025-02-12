@@ -8,10 +8,10 @@ def prendre_decision(question, options):
     :param options: Liste des réponses valides.
     :return: Réponse validée de l'utilisateur.
     """
-    decision = input(question).lower()
+    decision = input(question).lower().strip()
     while decision not in options:
         print("Action non reconnue. Veuillez choisir parmi les options suivantes: ", ", ".join(options))
-        decision = input(question).lower()
+        decision = input(question).lower().strip()
     return decision
 
 # Fonction simulant un défi avec une probabilité de réussite donnée
@@ -30,11 +30,44 @@ def lancer_defi(proba_reussite, succes_msg, echec_msg):
         print(echec_msg)  # Échec du défi
         return False
 
+# Nouveau système de combat utilisant une boucle while (pour les rounds) et deux boucles for (pour simuler les attaques)
+def combat(nom_adversaire, points_vie_adversaire, points_vie_joueur):
+    print(f"\n*** Le combat contre {nom_adversaire} commence ! ***")
+    round_number = 1
+    # Boucle while principale du combat
+    while points_vie_adversaire > 0 and points_vie_joueur > 0:
+        print(f"\n--- Round {round_number} ---")
+        
+        # Attaque du joueur : il dispose de 3 frappes par round
+        total_degats = 0
+        for frappe in range(3):
+            degats = random.randint(1, 3)
+            total_degats += degats
+            print(f"Votre frappe {frappe + 1} inflige {degats} points de dégâts.")
+        points_vie_adversaire -= total_degats
+        if points_vie_adversaire <= 0:
+            print(f"\nVous avez vaincu {nom_adversaire} !")
+            break
+        else:
+            print(f"{nom_adversaire} a encore {points_vie_adversaire} points de vie.")
+
+        # Attaque de l'adversaire : il attaque 2 fois par round
+        total_degats_adversaire = 0
+        for attaque in range(2):
+            degats = random.randint(1, 4)
+            total_degats_adversaire += degats
+            print(f"{nom_adversaire} attaque {attaque + 1} et vous inflige {degats} points de dégâts.")
+        points_vie_joueur -= total_degats_adversaire
+        if points_vie_joueur <= 0:
+            print("\nVous avez été vaincu par votre adversaire...")
+            break
+        else:
+            print(f"Il vous reste {points_vie_joueur} points de vie.")
+        round_number += 1
+    return points_vie_joueur > 0
+
 # Fonction principale gérant l'aventure textuelle
 def aventure():
-    """
-    Gère le déroulement de l'aventure textuelle interactive.
-    """
     print("========================================")
     print("Bienvenue dans cette aventure textuelle !")
     print("========================================\n")
@@ -61,7 +94,7 @@ def aventure():
         else:
             print("\nVous suivez prudemment la rive et découvrez un vieux pont en pierre qui vous permet de traverser en toute sécurité.")
 
-    else:  # Si l'utilisateur a choisi le chemin de droite
+    else:  # Chemin droit
         print("\nVous avez choisi le chemin de droite, dans l'ombre dense des arbres.")
 
         # Rencontre avec un animal sauvage
@@ -73,8 +106,11 @@ def aventure():
         if decision_animal == "cacher":
             print("\nVous vous faufilez derrière un buisson. L'animal, intrigué, passe sans vous remarquer.")
         else:
-            lancer_defi(6, "Votre habileté vous permet de vaincre l'animal, qui s'enfuit en grognant.", 
-                        "L'animal se révèle plus redoutable que prévu. Vous subissez quelques blessures, mais parvenez à le repousser.")
+            print("\nVous décidez d'affronter l'animal sauvage !")
+            # Utilisation du système de combat
+            if not combat("Animal Sauvage", points_vie_adversaire=10, points_vie_joueur=15):
+                print("Trop blessé pour continuer votre aventure...")
+                return  # Fin de l'aventure si le joueur est vaincu
 
     # Découverte de la grotte
     print("\nAprès plusieurs heures de marche, vous découvrez enfin une grotte énigmatique, cachée sous la liane d'un grand arbre.")
@@ -108,39 +144,44 @@ def aventure():
 
             if gardien == "parler":
                 print("\nVotre sincérité et vos bonnes manières impressionnent le gardien.")
-                if chemin in ["gauche", "droite"]:
-                    print("Le gardien vous accorde l'accès au trésor en vous conseillant une relique ancestrale.")
-                    tresor = True
-                else:
-                    print("Malheureusement, votre parcours hésitant ne convainc pas le gardien. Vous quittez la grotte bredouille.")
+                print("Il vous confie l'accès au trésor en vous recommandant une relique ancestrale.")
+                tresor = True
+            else:
+                print("\nVous engagez un combat contre le gardien !")
+                # Combat contre le gardien via notre système de combat
+                tresor = combat("Gardien de la Grotte", points_vie_adversaire=12, points_vie_joueur=15)
+                if not tresor:
+                    print("Le gardien est trop puissant et vous blesse grièvement. Le trésor reste hors de portée.")
 
-            else:  # Tentative d'affrontement du gardien avec l'utilisation de lancer_defi
-                tresor = lancer_defi(4, "Après un combat acharné, vous triomphez du gardien et découvrez le trésor caché derrière lui.", 
-                                     "Le gardien est trop puissant et vous blesse grièvement. Vous devez fuir la grotte, le trésor restant hors de portée.")
-
-    else:  # Exploration des environs à la place de la grotte
+    else:  # Exploration des environs
         print("\nVous choisissez de contourner la grotte. En explorant les environs, vous trouvez un vieux parchemin attaché à une branche.")
         print("Le parchemin décrit l'emplacement d'un trésor, mais comporte une énigme à résoudre.")
 
-        # Résolution de l'énigme
-        enigme = prendre_decision(
-            "Enigme : 'Je suis léger comme une plume, mais même le plus fort des hommes ne peut me tenir plus de 5 minutes. Qui suis-je?' Tapez votre réponse: ",
-            ['la respiration', 'respiration']
-        )
-
-        if enigme in ["la respiration", "respiration"]:
-            print("\nBravo ! Vous avez résolu l'énigme. Le parchemin révèle l'emplacement d'un petit coffre enterré sous un vieux chêne.")
-            tresor = lancer_defi(6, "En creusant sous le chêne, vous découvrez un coffre rempli de pièces d'or et de bijoux rares!", 
-                                 "Malheureusement, le coffre est vide. La légende du trésor reste un mystère pour vous.")
+        # Mini-jeu d'énigme avec plusieurs tentatives
+        essais = 0
+        solved = False
+        # Boucle while pour permettre jusqu'à 3 tentatives
+        while essais < 3 and not solved:
+            reponse = input("Enigme : 'Je suis léger comme une plume, mais même le plus fort des hommes ne peut me tenir plus de 5 minutes. Qui suis-je?' Tapez votre réponse: ").lower().strip()
+            if reponse in ["la respiration", "respiration"]:
+                solved = True
+                break
+            else:
+                essais += 1
+                print("Réponse incorrecte. Essayez encore.")
+        if solved:
+            print("\nBravo ! Vous avez résolu l'énigme. Le parchemin révèle l'emplacement d'un coffre.")
+            tresor = lancer_defi(6, "En creusant sous le vieux chêne, vous découvrez un coffre rempli de pièces d'or et de bijoux rares !", 
+                                 "Malheureusement, en creusant, vous ne trouvez rien d'intéressant.")
         else:
-            print("\nVotre réponse n'est pas correcte. Le parchemin se déchire et le secret du trésor reste à jamais perdu.")
+            print("\nVous n'avez pas réussi à résoudre l'énigme. Le secret du trésor reste à jamais perdu.")
 
     # Conclusion de l'aventure
     print("\n========================================")
     if tresor:
         print("Félicitations ! Vous avez trouvé le trésor et terminé votre aventure avec succès.")
     else:
-        print("Votre aventure s'achève sans trésor")
+        print("Votre aventure s'achève sans trésor.")
     print("========================================")
     print("Merci d'avoir joué à cette aventure.")
 
