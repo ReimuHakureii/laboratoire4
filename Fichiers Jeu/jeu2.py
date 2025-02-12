@@ -35,12 +35,6 @@ def lancer_defi(proba_reussite, succes_msg, echec_msg):
 def combat(nom_adversaire, points_vie_adversaire, points_vie_joueur):
     """
     Simule un combat entre le joueur et un adversaire. (En tout cas ça essaie lol)
-    
-    Le combat se déroule en rounds successifs. À chaque round, le joueur attaque en effectuant 3 frappes,
-    chacune infligeant un nombre aléatoire de dégâts entre 1 et 3, puis l'adversaire réplique avec 2 attaques,
-    chacune infligeant un nombre aléatoire de dégâts entre 1 et 4. Le combat continue jusqu'à ce que l'adversaire
-    ou le joueur n'ait plus de points de vie.
-
     :param nom_adversaire: Nom de l'adversaire.
     :param points_vie_adversaire: Points de vie de l'adversaire au début du combat.
     :param points_vie_joueur: Points de vie du joueur au début du combat.
