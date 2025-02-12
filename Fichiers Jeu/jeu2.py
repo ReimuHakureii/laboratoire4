@@ -1,3 +1,4 @@
+# VERSION 2 DU JEU
 import random
 import time
 
