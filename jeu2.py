@@ -1,4 +1,5 @@
 import random
+import time
 
 # Fonction permettant de poser une question à l'utilisateur et de s'assurer qu'il choisit une option valide
 def prendre_decision(question, options):
@@ -50,6 +51,7 @@ def combat(nom_adversaire, points_vie_adversaire, points_vie_joueur):
     # Boucle while principale du combat
     while points_vie_adversaire > 0 and points_vie_joueur > 0:
         print(f"\n--- Round {round_number} ---")
+        time.sleep(1)
         
         # Attaque du joueur : il dispose de 3 frappes par round
         total_degats = 0
@@ -57,12 +59,15 @@ def combat(nom_adversaire, points_vie_adversaire, points_vie_joueur):
             degats = random.randint(1, 3)
             total_degats += degats
             print(f"Votre frappe {frappe + 1} inflige {degats} points de dégâts.")
+            time.sleep(0.5)
         points_vie_adversaire -= total_degats
         if points_vie_adversaire <= 0:
             print(f"\nVous avez vaincu {nom_adversaire} !")
+            time.sleep(1)
             break
         else:
             print(f"{nom_adversaire} a encore {points_vie_adversaire} points de vie.")
+            time.sleep(1)
 
         # Attaque de l'adversaire : il attaque 2 fois par round
         total_degats_adversaire = 0
@@ -70,12 +75,15 @@ def combat(nom_adversaire, points_vie_adversaire, points_vie_joueur):
             degats = random.randint(1, 4)
             total_degats_adversaire += degats
             print(f"{nom_adversaire} attaque {attaque + 1} et vous inflige {degats} points de dégâts.")
+            time.sleep(0.5)
         points_vie_joueur -= total_degats_adversaire
         if points_vie_joueur <= 0:
             print("\nVous avez été vaincu par votre adversaire...")
+            time.sleep(1)
             break
         else:
             print(f"Il vous reste {points_vie_joueur} points de vie.")
+            time.sleep(1)
         round_number += 1
     return points_vie_joueur > 0
 
