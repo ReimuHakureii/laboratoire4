@@ -31,7 +31,7 @@ def lancer_defi(proba_reussite, succes_msg, echec_msg):
         print(echec_msg)  # Échec du défi
         return False
 
-# Nouveau système de combat utilisant une boucle while (pour les rounds) et deux boucles for (pour simuler les attaques)
+# Nouveau système de combat utilisant une boucle while (pour les rounds) et deux boucles for (pour les attaques)
 def combat(nom_adversaire, points_vie_adversaire, points_vie_joueur):
     """
     Simule un combat entre le joueur et un adversaire. (En tout cas ça essaie lol)
@@ -47,7 +47,7 @@ def combat(nom_adversaire, points_vie_adversaire, points_vie_joueur):
         print(f"\n--- Round {round_number} ---")
         time.sleep(1)
         
-        # Attaque du joueur : il dispose de 3 frappes par round
+        # Attaque du joueur 3 attaques
         total_degats = 0
         for frappe in range(3):
             degats = random.randint(1, 3)
@@ -63,7 +63,7 @@ def combat(nom_adversaire, points_vie_adversaire, points_vie_joueur):
             print(f"{nom_adversaire} a encore {points_vie_adversaire} points de vie.")
             time.sleep(1)
 
-        # Attaque de l'adversaire : il attaque 2 fois par round
+        # Adversaire 2 attaques
         total_degats_adversaire = 0
         for attaque in range(2):
             degats = random.randint(1, 4)
@@ -186,6 +186,7 @@ def aventure():
                 solved = True
                 break
             else:
+                # Mauvaise réponse im so fkn tired
                 attempts += 1
                 print("Réponse incorrecte. Essayez encore.")
         if solved:
