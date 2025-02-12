@@ -1,3 +1,4 @@
+#Modifications pour version 2.0 du jeu
 """
 1- importations et entrées :
 module time pour temporisations dans le jeu.
